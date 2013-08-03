@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# compilec - Compiles and executes a program written in C, then deletes the output file again.
+# compilec - Compiles and executes a program written in C, then deletes the
+# output file again.
 # Displays any error messages in less/more for debugging compile errors.
-# Uses the GNU Compiler Collection (GCC).
 # Copyright Daniel Cranston 2008-2013.
 #
 # This file is free software: you can redistribute it and/or modify
@@ -17,8 +17,6 @@
 #
 # You should have received a copy of the GNU General Public License along
 # with this file. If not, see <http://www.gnu.org/licenses/>.
-
-echo
 
 # Check if programs this script depends on exist
 if ! (which gcc &> /dev/null); then

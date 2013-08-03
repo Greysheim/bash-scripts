@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this file. If not, see <http://www.gnu.org/licenses/>.
 
-logFile="/Users/dax/.dax/mountrimu.log"
+logFile="~/.scripts/mountrimu.log"
 volName="GreyRimu"
 mountPoint="/Volumes/$volName/"
 
@@ -25,8 +25,10 @@ mkdir $mountPoint > $logFile 2>&1 && \
 /usr/local/bin/sshfs grey@rimu:/ $mountPoint -o reconnect,volname="$volName" >> $logFile 2>&1 && \
 echo "Successful mount!" >> $logFile
 
-# Uncomment one of these lines for verbosity.
-# /usr/bin/osascript -e "tell app \"System Events\" to display alert \"$(cat $logFile)\"" &> /dev/null # Display output in alert window
-cat $logFile # Display output in stdout
+# Display output in alert window (Mac OS X)
+# /usr/bin/osascript -e "tell app \"System Events\" to display alert \"$(cat $logFile)\"" &> /dev/null
+
+# Display output in stdout
+cat $logFile
 
 rm $logFile
