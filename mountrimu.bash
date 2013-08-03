@@ -16,19 +16,19 @@
 # You should have received a copy of the GNU General Public License along
 # with this file. If not, see <http://www.gnu.org/licenses/>.
 
-logFile="~/.scripts/mountrimu.log"
+hostName="grey@rimu:/"
 volName="GreyRimu"
 mountPoint="/Volumes/$volName/"
 
-
-mkdir $mountPoint > $logFile 2>&1 && \
-/usr/local/bin/sshfs grey@rimu:/ $mountPoint -o reconnect,volname="$volName" >> $logFile 2>&1 && \
-echo "Successful mount!" >> $logFile
+# Create mount point and mount; capture output in $result
+# If mount fails, remove mount point if it exists and is empty
+result=$( mkdir $mountPoint 2>&1 ) && \
+result="$result"$( sshfs $hostName $mountPoint -o reconnect,volname="$volName" 2>&1 ) && \
+result="$result""Successful mount!" || \
+rmdir $mountPoint &> /dev/null
 
 # Display output in alert window (Mac OS X)
-# /usr/bin/osascript -e "tell app \"System Events\" to display alert \"$(cat $logFile)\"" &> /dev/null
+# /usr/bin/osascript -e "tell app \"System Events\" to display alert \"$result\"" &> /dev/null
 
 # Display output in stdout
-cat $logFile
-
-rm $logFile
+echo -e "$result"
