@@ -27,6 +27,7 @@ PS1='\h:\W \u\$ '
 
 # Custom Commands
 alias ll="ls -alF"
+alias lll="ls -alF | less"
 
 # SSHFS Drive
 alias mountrimu="bash ~/.scripts/mountrimu.bash"
