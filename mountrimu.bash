@@ -18,17 +18,25 @@
 
 hostName="grey@rimu:/"
 volName="GreyRimu"
-mountPoint="/Volumes/$volName/"
+mountPoint="/Volumes/$volName"
 
-# Create mount point and mount; capture output in $result
-# If mount fails, remove mount point if it exists and is empty
-result=$( mkdir $mountPoint 2>&1 ) && \
-result="$result"$( sshfs $hostName $mountPoint -o reconnect,volname="$volName" 2>&1 ) && \
-result="$result""Successful mount!" || \
-rmdir $mountPoint &> /dev/null
+# If already mounted, abort
+if [ ! -z "$(mount | grep "$mountPoint")" ]; then
+   echo "mountrimu: cannot mount: $mountPoint already mounted" >&2
+   exit 1
+fi
 
-# Display output in alert window (Mac OS X)
-# /usr/bin/osascript -e "tell app \"System Events\" to display alert \"$result\"" &> /dev/null
+# If mountpoint doesn't exist, create it;
+# Else if it exists and is not empty, abort
+if [ ! -d "$mountPoint" ]; then
+   echo "mountrimu: creating $mountPoint"
+   mkdir $mountPoint
+elif [ ! -z "$(ls -A "$mountPoint")" ]; then
+   echo "mountrimu: cannot mount: $mountPoint not empty" >&2
+   exit 1
+fi
 
-# Display output in stdout
-echo -e "$result"
+# Attempt to mount
+#echo "mountrimu: mounting..."
+sshfs "$hostName" "$mountPoint" -o reconnect,volname="$volName"
+exit $?
