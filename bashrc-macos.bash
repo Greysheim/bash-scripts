@@ -12,16 +12,13 @@ if [ $? -eq 1 ] ; then
 fi
 
 #### MotD ####
-echo
-echo "`uname -sr`, `uname -m`; `uname -n`"
-echo "Successful login. Welcome, $USER. (^_^);;"
-echo
+#echo "$(uname -sr), $(uname -m); $(uname -n)"
+#echo "Successful login. Welcome, $USER. (^_^);;"
 
 #### Environment Variables ####
 
 # Set Prompt Variable
-#PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-PS1='\h:\W \u\$ '
+PS1='\u@\h:\w\$'
 
 #### Customised Commands and Scripts ####
 
