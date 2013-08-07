@@ -36,7 +36,7 @@ fi
 if [ ! -d "$mountPoint" ]; then
 #   echo "$scriptName: creating $mountPoint"
    mkdir $mountPoint
-elif [ ! -z "$(ls -A "$mountPoint")" ]; then
+elif [ "$(ls -A "$mountPoint")" ]; then
    echo "$scriptName: cannot mount: $mountPoint not empty" >&2
    exit 1
 fi
