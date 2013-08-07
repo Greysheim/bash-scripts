@@ -16,27 +16,32 @@
 # You should have received a copy of the GNU General Public License along
 # with this file. If not, see <http://www.gnu.org/licenses/>.
 
+scriptName="mountrimu"
 hostName="grey@rimu:/"
 volName="GreyRimu"
+
+# Mount directory for Mac OS X
 mountPoint="/Volumes/$volName"
+# Mount directory for Linux
+#mountPoint="/mnt/$volName"
 
 # If already mounted, abort
-if [ ! -z "$(mount | grep "$mountPoint")" ]; then
-   echo "mountrimu: cannot mount: $mountPoint already mounted" >&2
+if (mount | grep "$mountPoint" > /dev/null); then
+   echo "$scriptName: cannot mount: $mountPoint already mounted" >&2
    exit 1
 fi
 
 # If mountpoint doesn't exist, create it;
-# Else if it exists and is not empty, abort
+# If it exists and is not empty, abort
 if [ ! -d "$mountPoint" ]; then
-   echo "mountrimu: creating $mountPoint"
+#   echo "$scriptName: creating $mountPoint"
    mkdir $mountPoint
 elif [ ! -z "$(ls -A "$mountPoint")" ]; then
-   echo "mountrimu: cannot mount: $mountPoint not empty" >&2
+   echo "$scriptName: cannot mount: $mountPoint not empty" >&2
    exit 1
 fi
 
 # Attempt to mount
-#echo "mountrimu: mounting..."
+#echo "$scriptName: mounting..."
 sshfs "$hostName" "$mountPoint" -o reconnect,volname="$volName"
 exit $?
