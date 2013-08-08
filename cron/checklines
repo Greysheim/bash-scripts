@@ -1,0 +1,64 @@
+#!/bin/bash
+
+#   checklines - Sends message to PushBullet if webpage has been updated
+#   Checks for a change in number of lines since last invocation
+#   Copyright Daniel Cranston 2013.
+#
+#   This file is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by the
+#   Free Software Foundation, either version 3 of the License, or (at your
+#   option) any later version.
+#
+#   This file is distributed in the hope that it will be useful, but
+#   WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+#   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+#   for more details.
+#
+#   You should have received a copy of the GNU General Public License along
+#   with this file (in the file COPYING). If not, see
+#   <http://www.gnu.org/licenses/>.
+
+#echo '$0:' "$0"
+
+scriptLoc="$HOME""/.scripts/cron/checklines"
+linesLog="$scriptLoc"".lines.log"
+runLog="$scriptLoc"".run.log"
+dataLog="$scriptLoc"".data.log"
+
+lastCount=$(cat $linesLog 2> /dev/null)
+postData=$(sed '1q;d;' $dataLog)
+url=$(sed '2q;d;' $dataLog)
+apiKey=$(sed '3q;d;' $dataLog)
+deviceID=$(sed '4q;d;' $dataLog)
+pushMsg=$(sed '5q;d;' $dataLog)
+
+dateStamp=$(date +%Y-%m-%d\ %H\:%M\:%S)
+
+thisCount=$(wget \
+     --post-data "$postData" \
+     --quiet \
+     --output-document='-' \
+     "$url" | \
+     wc -l)
+
+echo -n "$dateStamp ($lastCount -> $thisCount) " >> $runLog
+
+if [[ $thisCount > $lastCount ]]; then
+     echo -e -n "Lines have been added: Sending to PushBullet: \n     " >> $runLog
+     curl https://www.pushbullet.com/api/pushes \
+          --silent \
+          -u "$apiKey": \
+          -d device_id="$deviceID" \
+          -d type=note \
+          -d title="$pushMsg" \
+          -d body="$dateStamp $lastCount -> $thisCount" \
+          -X POST \
+          &>> $runLog
+     echo >> $runLog
+else
+     echo "No lines have been added." >> $runLog
+fi
+
+echo $thisCount > $linesLog
+
+#tail -20 $runLog | less
