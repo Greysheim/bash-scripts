@@ -23,6 +23,7 @@ Sandbox/
 *.jar
 *.rar
 *.tar
+*.tgz
 *.zip
 
 # Logs and databases #

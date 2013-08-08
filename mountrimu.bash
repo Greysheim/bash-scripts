@@ -17,7 +17,7 @@
 # with this file. If not, see <http://www.gnu.org/licenses/>.
 
 scriptName="mountrimu"
-hostName="grey@rimu:/"
+hostName="grey@rimu:/home/grey"
 volName="GreyRimu"
 
 # Mount directory for Mac OS X
@@ -26,7 +26,7 @@ mountPoint="/Volumes/$volName"
 #mountPoint="/mnt/$volName"
 
 # If already mounted, abort
-if (mount | grep "$mountPoint" > /dev/null); then
+if ( mount | grep "$mountPoint" > /dev/null ); then
    echo "$scriptName: cannot mount: $mountPoint already mounted" >&2
    exit 1
 fi
@@ -43,5 +43,6 @@ fi
 
 # Attempt to mount
 #echo "$scriptName: mounting..."
-sshfs "$hostName" "$mountPoint" -o reconnect,volname="$volName"
+sshfs "$hostName" "$mountPoint" \
+   -o volname="$volName",reconnect,follow_symlinks
 exit $?

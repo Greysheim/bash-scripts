@@ -18,7 +18,7 @@ fi
 #### Environment Variables ####
 
 # Set Prompt Variable
-PS1='\u@\h:\w\$'
+PS1='\u@\h:\w\$ '
 
 #### Customised Commands and Scripts ####
 
