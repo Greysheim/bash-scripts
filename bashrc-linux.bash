@@ -43,7 +43,7 @@ ssh-add ~/.ssh/greyrimu_github_rsa &> /dev/null
 # Set default directory for new windows to home directory
 tmux set-option default-path ~ > /dev/null
 # Auto-attach
-if ( pgrep tmux > /dev/null ); then
+if ( ! pgrep tmux > /dev/null ); then
     echo "[tmux: starting]"
     tmux
 elif [ -z "$TMUX" ]; then
@@ -51,15 +51,14 @@ elif [ -z "$TMUX" ]; then
     tmux attach
 fi 
 
-###Aliases###
+### Aliases and Scripts ###
+alias cllog='tail -20 ~/.scripts/cron/checklines.run.log | less'
+alias compilec='~/.scripts/compilec.bash'
 alias ll='ls -alF'
 alias lll='ls -alF | less'
-
-###Scripts###
-alias mcrun='callDir=$PWD; cd ~/minecraft/server && ./run; cd $callDir; unset callDir'
 alias mckill='pkill -9 -f minecraft'
+alias mcrun='~/minecraft/server/run'
 alias tma='tmux attach'
-alias cllog='tail -20 ~/.scripts/cron/checklines.run.log | less'
 
 ### Functions ###
 #Set window title (tmux, etc)

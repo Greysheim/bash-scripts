@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# compilec - Compiles and executes a program written in C, then deletes the
-# output file again.
-# Displays any error messages in less/more for debugging compile errors.
+# compilec - Compiles and executes C program(s) then deletes output file.
+# Displays any error messages in less for debugging compile errors.
 # Copyright Daniel Cranston 2008-2013.
 #
 # This file is free software: you can redistribute it and/or modify
@@ -18,107 +17,86 @@
 # You should have received a copy of the GNU General Public License along
 # with this file. If not, see <http://www.gnu.org/licenses/>.
 
-# Check if programs this script depends on exist
-if ! (which gcc &> /dev/null); then
-	echo "GCC not found. Aborting." >&2
-	echo
-	exit 1
-fi
-if ! (which less &> /dev/null); then
-	echo -n "less not found. Checking for more . . . " >&2
-	if ! (which more &> /dev/null); then
-		echo "Not found. Aborting." >&2
-		echo
-		exit 1
-	else
-		echo "Found. Reverting to more." >&2
-		text="more"
-	fi
-else
-	text="less"
+if [ $PS1 ]; then
+   echo "compilec: Please run as a subprocess" >&2
+   return 10
 fi
 
-# cd to the relevant directory where the *.c files are
-param1Check=$(echo $1 | wc -w | awk '{print $1}')
-
-if [ $param1Check != 0 ]; then # Check if the path was passed as a parameter
-	thisdir=$1
-	cd "$thisdir"
-	if [ $? != 0 ]; then
-		echo "Error cd'ing to directory passed as input."
-		echo
-		exit 1
-	fi
-else
-	thisdir=$(dirname "$0")
-	cd "$thisdir"
-	if [ $? != 0 ]; then
-		echo "Error cd'ing to the directory of this script."
-		echo "Please use e.g. \"~/CompileC.bash\" instead of \". ~/CompileC.bash\""
-		echo "Else pass relevant directory e.g. \". ~/CompileC.bash $(pwd)\""
-		echo
-		exit 1
-	fi
+if [ $2 ]; then
+   echo "compilec: Too many args" >&2
+   exit 11
 fi
 
-echo "Current directory: $thisdir"
-
-#Check if there are any files named *.c
-if ! [ -a *.c ]; then
-	echo "No programs found. Aborting."
-	echo
-	exit 1
-fi
-numCFiles=$(ls *.c | wc -w | awk '{print $1}')
-
-# If there is only one *.c file in the directory, run it.
-# If there are more, ask user which should be run
-if [ $numCFiles == 1 ]; then
-	Application=$(ls *.c)
-	echo "Running $Application"
-else
-	echo "Please enter the file name of the application to run:"
-	ls *.c
-	read Application
+if ( ! which gcc less &> /dev/null ); then
+   echo "compilec: Dependencies not found" >&2
+   exit 20
 fi
 
-echo
+#echo 'compilec-debug: $1:' "$1"
+
+# If parameter is a directory, go there; else assume it is a file to run
+if [ $1 ]; then
+   if [ -d $1 ]; then
+      cd $1 || exit 30
+   else
+      app="$1"
+   fi
+fi
+
+# If file not yet specified
+if [ -z "$app" ]; then
+   # Check if there are any files named *.c in directory
+   if ( ! ls *.c &> /dev/null ); then
+      echo "compilec: No programs found" >&2
+      exit 40
+   fi
+
+   # If directory contains one *.c file, run it; else ask user to specify
+   if [ $(ls *.c | wc -w) == 1 ]; then
+      app=$(ls *.c)
+      #echo "Running $app"
+   else
+      echo "Please enter the file name of the application to run:"
+      ls *.c
+      read app
+   fi
+fi
+
 # Check if the file to be compiled exists
-if ! [ -a $Application ]; then
-	echo "Application not found. Aborting."
-	echo
-	exit 1
+if ! [ -a $app ]; then
+   echo "compilec: $app not found" >&2
+   exit 50
 fi
 
-# Compile and execute, or display errors in less/more if unsuccessful
-echo -n "Compiling . . . "
-gcc -ansi $Application -o $Application.out 1> compileOut.txt 2> compileErr.txt
-compileExitStatus=$?
-
-if [[  $compileExitStatus == 0 && $(cat compileErr.txt | wc -w | awk '{print $1}') == 0 ]]; then
-	if [[ $(cat compileOut.txt | wc -w | awk '{print $1}') != 0 ]]; then
-		$text < compileOut.txt # Catch-all in case GCC writes anything to stdout (shouldn't)
-	fi
-	rm compileErr.txt compileOut.txt
-	echo "Successful compile."
-	echo "Executing application . . ."
-	echo
-	./$Application.out 2> runErr.txt # Execute
-	runExitStatus=$?
-	if [[ $runExitStatus != 0 || $(cat runerr.txt | wc -w | awk '{print $1}') != 0 ]]; then
-		echo "Run error: $Application.out returned exit status of $runExitStatus" >> runErr.txt
-		# Display anything written to stderr, and the program's exit status if != 0
-		$text < runErr.txt
-	fi
-	echo
-	rm $Application.out runErr.txt
+# Create temp files for EXEcutable, Compile stdOUT and Compile stdERR
+exe=$(mktemp)
+cOut=$(mktemp)
+cErr=$(mktemp)
+#echo -n "Compiling... "
+gcc -ansi $app -o $exe 1> $cOut 2> $cErr
+cExit=$?
+# If compile successful, execute and display any run errors;
+# Else display output from compile
+if [[ $cExit == 0 &&  (! -s $cErr) ]]; then
+   [ -s $cOut ] && less $cOut
+   rm $cErr $cOut
+   #echo "Executing..."
+   rErr=$(mktemp)
+   $exe 2> $rErr
+   rExit=$?
+   echo
+   if [[ $rExit != 0 || -s $rErr ]]; then
+      [ -s $rErr ] && less $rErr
+      echo "compilec: Run error: $app exited $rExit" >&2
+   fi
+   rm $exe $rErr
 else
-	rm $Application.out 2> /dev/null
-	cat compileOut.txt compileErr.txt | $text
-	echo "Compile error." >&2
-	rm compileOut.txt compileErr.txt
-	echo
-	exit 1
+   echo
+   rm $exe 2> /dev/null
+   ( [ -s $cOut ] || [ -s $cErr ] ) && cat $cOut $cErr | less
+   echo "compilec: Compile error: gcc exited $cExit" >&2
+   rm $cOut $cErr
+   exit 60
 fi
 
 exit 0
