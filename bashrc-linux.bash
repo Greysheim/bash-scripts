@@ -40,8 +40,9 @@ eval $(ssh-agent) &> /dev/null
 ssh-add ~/.ssh/greyrimu_github_rsa &> /dev/null
 
 ### Tmux ###
-# Set default directory for new windows to home directory
+# Options
 tmux set-option default-path ~ > /dev/null
+tmux set-option status-bg cyan > /dev/null
 # Auto-attach
 if ( ! pgrep tmux > /dev/null ); then
     echo "[tmux: starting]"
