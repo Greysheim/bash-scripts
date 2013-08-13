@@ -35,6 +35,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 ##### Daniel Cranston's Additions #####
 
+declare -x MANWIDTH="80"
+
 ### SSH ###
 eval $(ssh-agent) &> /dev/null
 ssh-add ~/.ssh/greyrimu_github_rsa &> /dev/null
@@ -63,6 +65,6 @@ alias tma='tmux attach'
 
 ### Functions ###
 #Set window title (tmux, etc)
-settitle() {
+function settitle() {
     printf "\033k$1\033\\"
 }
