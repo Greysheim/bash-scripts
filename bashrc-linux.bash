@@ -63,11 +63,6 @@ alias tma='tmux attach'
 
 ### Functions ###
 
-#Set window title (tmux, etc)
-function settitle() {
-    printf "\033k$1\033\\"
-}
-
 #Save manpage to a web-accessible .txt
 function mansave() {
    declare -x MANWIDTH="80"
