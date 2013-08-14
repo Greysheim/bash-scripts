@@ -73,3 +73,15 @@ function mansave() {
    declare -x MANWIDTH="80"
    man "$1" 2> /dev/null | col -b > "$HOME/www/manpages/$1.txt"
 }
+
+#Create backup tarball of ~/minecraft/server
+function mcbackup() {
+   if ( pgrep -f "minecraft_server" &> /dev/null ); then
+      printf '%s\n' "mcbackup: cannot backup: minecraft is running" >&2
+      return 1
+   fi
+   tarName="greysheim-$(date +%Y-%m-%d).tgz"
+   cd "$HOME/minecraft" || return 2
+   tar -cvzf "saves/$tarName" "server/" | less
+   cd $OLDPWD
+}
