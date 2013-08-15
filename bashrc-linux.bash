@@ -51,9 +51,7 @@ function mansave() {
 
 # Add SSH keys
 function addsshkeys() {
-   if [ $(ssh-add -l &> /dev/null; printf '%q' "$?") == 2 ] ; then
-      eval $(ssh-agent) &> /dev/null
-   fi
+   eval $(ssh-agent) &> /dev/null
    if ( ! ssh-add -l | grep "greyrimu_github_rsa" &> /dev/null ); then
       ssh-add ~/.ssh/greyrimu_github_rsa &> /dev/null
    fi
