@@ -35,48 +35,36 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 ##### Daniel Cranston's Additions #####
 
-### SSH ###
-eval $(ssh-agent) &> /dev/null
-ssh-add ~/.ssh/greyrimu_github_rsa &> /dev/null
-
-### Tmux ###
-# Options
-tmux set-option default-path ~ > /dev/null
-tmux set-option status-bg cyan > /dev/null
-# Auto-attach
-if ( ! pgrep tmux > /dev/null ); then
-    echo "[tmux: starting]"
-    tmux
-elif [ -z "$TMUX" ]; then
-    echo "[tmux: attaching]"
-    tmux attach
-fi 
-
-### Aliases and Scripts ###
-alias cllog='tail -20 ~/.scripts/cron/checklines.run.log | less'
-alias compilec='~/.scripts/compilec.bash'
+### Aliases, Scripts, Functions ###
 alias ll='ls -alF'
 alias lll='ls -alF | less'
-alias mckill='pkill -9 -f minecraft'
+alias cllog='tail -20 ~/.scripts/cron/checklines.run.log | less'
 alias mcrun='~/minecraft/server/run'
-alias tma='tmux attach'
+alias mckill='pkill -9 -f minecraft_server'
+alias compilec='~/.scripts/compilec.bash'
 
-### Functions ###
-
-#Save manpage to a web-accessible .txt
+# Save manpage to a web-accessible .txt
 function mansave() {
    declare -x MANWIDTH="80"
    man "$1" 2> /dev/null | col -b > "$HOME/www/manpages/$1.txt"
 }
 
-#Create backup tarball of ~/minecraft/server
-function mcbackup() {
-   if ( pgrep -f "minecraft_server" &> /dev/null ); then
-      printf '%s\n' "mcbackup: cannot backup: minecraft is running" >&2
-      return 1
+# Add SSH keys
+function addsshkeys() {
+   if [ $(ssh-add -l &> /dev/null; printf '%q' "$?") == 2 ] ; then
+      eval $(ssh-agent) &> /dev/null
    fi
-   tarName="greysheim-$(date +%Y-%m-%d).tgz"
-   cd "$HOME/minecraft" || return 2
-   tar -cvzf "saves/$tarName" "server/" | less
-   cd $OLDPWD
+   if ( ! ssh-add -l | grep "greyrimu_github_rsa" &> /dev/null ); then
+      ssh-add ~/.ssh/greyrimu_github_rsa &> /dev/null
+   fi
 }
+
+# Tmux: run if not running; else attach if not attached
+function tma() {
+   [ $TMUX ] && return
+   tmux attach &> /dev/null || tmux &> /dev/null
+}
+
+### Run ###
+addsshkeys
+tma

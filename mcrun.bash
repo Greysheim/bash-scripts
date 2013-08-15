@@ -24,6 +24,9 @@ if [ $PS1 ]; then
    return 1
 fi
 
+worldName="greysheim"
+saveDir="saves"
+
 if ( pgrep -f "minecraft_server" &> /dev/null ); then
    printf '%s\n' "mcrun: minecraft is already running" >&2
    exit 1
@@ -40,5 +43,12 @@ oldWName="$(tmux display-message -p "#W" 2> /dev/null)"
 exitStatus=$?
 
 [ "$TMUX" ] && tmux renamew "$oldWName" &> /dev/null
+
+# Backup world to a tarball in "../$saveDir"
+printf '%s\n' "Backing up world..."
+[ -d "../$saveDir" ] || mkdir "../$saveDir"
+worldDir=$(printf '%q' "${PWD##*/}")
+cd .. && tar -cvzf "$saveDir/$worldName-$(date +%Y-%m-%d).tgz" "$worldDir/"
+exitStatus=$(( $exitStatus + $? ))
 
 exit $exitStatus
