@@ -28,3 +28,13 @@ alias lll="ls -alF | less"
 
 # SSHFS Drive
 alias mountrimu="bash ~/.scripts/mountrimu.bash"
+
+### Functions ###
+
+# Get External IP; Send to GreyRimu
+function sendip() {
+   #ipSource="ifconfig.me"
+   ipSource="icanhazip.com"
+   curl -s "$ipSource" > "$HOME/.daxmacip" || return 1
+   rsync -avzqe ssh "$HOME/.daxmacip" 'grey@rimu:~/.ssh/'
+}
