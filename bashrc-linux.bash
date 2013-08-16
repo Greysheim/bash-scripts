@@ -70,7 +70,7 @@ function tma() {
    session="$USER"
 
    if  ( ! tmux has -t $session &> /dev/null ); then
-      tmux -2 new-session -ds $session -n 'minecraft'
+      tmux -2 new-session -ds $session
       tmux send-keys -t $session:0 "mcrun" C-m
       tmux new-window -t $session:1
    fi
