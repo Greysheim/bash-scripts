@@ -38,6 +38,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 ### Aliases, Scripts, Functions ###
 alias ll='ls -alF'
 alias lll='ls -alF | less'
+alias gitcheck='ssh -T github.com'
 alias cllog='tail -20 ~/.scripts/cron/checklines.run.log | less'
 alias mcrun='~/minecraft/server/run'
 alias mckill='pkill -9 -f minecraft_server'
@@ -51,18 +52,33 @@ function mansave() {
 
 # Add SSH keys
 function addsshkeys() {
-   eval $(ssh-agent) &> /dev/null
+   agentInfo="$HOME/.ssh/.ssh-agent"
+   pgrep ssh-agent &> /dev/null
+   if [ $? != 0 ] || ! [ -a "$agentInfo" ]; then
+      ssh-agent > "$agentInfo"
+   fi
+   . "$agentInfo" &> /dev/null
    if ( ! ssh-add -l | grep "greyrimu_github_rsa" &> /dev/null ); then
       ssh-add ~/.ssh/greyrimu_github_rsa &> /dev/null
    fi
 }
 
-# Tmux: run if not running; else attach if not attached
+# Tmux: start session if not running; attach
 function tma() {
    [ $TMUX ] && return
-   tmux attach &> /dev/null || tmux &> /dev/null
+
+   session="$USER"
+
+   if  ( ! tmux has -t $session &> /dev/null ); then
+      tmux -2 new-session -ds $session -n 'minecraft'
+      tmux send-keys -t $session:0 "mcrun" C-m
+      tmux new-window -t $session:1
+   fi
+
+   tmux -2 attach-session -t $session
 }
 
 ### Run ###
-addsshkeys
+
+[ -z "$TMUX" ] && addsshkeys
 tma

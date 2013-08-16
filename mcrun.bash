@@ -37,12 +37,12 @@ cd "$(dirname "$0" 2> /dev/null)" || exit 1
 
 # Set tmux window title to "minecraft"
 oldWName="$(tmux display-message -p "#W" 2> /dev/null)"
-[ "$TMUX" ] && tmux renamew "minecraft" &> /dev/null
+#[ "$TMUX" ] && printf '\033]2;%s\033\\' "minecraft"
 
 /usr/bin/java -Xms50M -Xmx350M -jar minecraft_server.jar nogui
 exitStatus=$?
 
-[ "$TMUX" ] && tmux renamew "$oldWName" &> /dev/null
+#[ "$TMUX" ] && printf '\033]2;%s\033\\' "$oldWName"
 
 # Backup world to a tarball in "../$saveDir"
 printf '%s\n' "Backing up world..."
