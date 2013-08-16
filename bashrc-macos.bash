@@ -12,8 +12,8 @@ if [ $? -eq 1 ] ; then
 fi
 
 #### MotD ####
-#echo "$(uname -sr), $(uname -m); $(uname -n)"
-#echo "Successful login. Welcome, $USER. (^_^);;"
+#printf '%s\n' "$(uname -sr), $(uname -m); $(uname -n)"
+#printf '%s\n' "Successful login. Welcome, $USER. (^_^);;"
 
 #### Environment Variables ####
 

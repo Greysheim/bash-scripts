@@ -27,22 +27,22 @@ mountPoint="/Volumes/$volName"
 
 # If already mounted, abort
 if ( mount | grep "$mountPoint" > /dev/null ); then
-   echo "$scriptName: cannot mount: $mountPoint already mounted" >&2
+   printf '%s\n' "$scriptName: cannot mount: $mountPoint already mounted" >&2
    exit 1
 fi
 
 # If mountpoint doesn't exist, create it;
 # If it exists and is not empty, abort
 if [ ! -d "$mountPoint" ]; then
-#   echo "$scriptName: creating $mountPoint"
+#   printf '%s\n' "$scriptName: creating $mountPoint"
    mkdir $mountPoint
 elif [ "$(ls -A "$mountPoint")" ]; then
-   echo "$scriptName: cannot mount: $mountPoint not empty" >&2
+   printf '%s\n' "$scriptName: cannot mount: $mountPoint not empty" >&2
    exit 1
 fi
 
 # Attempt to mount
-#echo "$scriptName: mounting..."
+#printf '%s\n' "$scriptName: mounting..."
 sshfs "$hostName" "$mountPoint" \
    -o volname="$volName",reconnect,follow_symlinks
 exit $?

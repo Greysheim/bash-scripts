@@ -35,6 +35,9 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 ##### Daniel Cranston's Additions #####
 
+### Environment Variables ###
+declare -x TZ="Pacific/Auckland"
+
 ### Aliases, Scripts, Functions ###
 alias ll='ls -alF'
 alias lll='ls -alF | less'
@@ -79,6 +82,5 @@ function tma() {
 }
 
 ### Run ###
-
 [ -z "$TMUX" ] && addsshkeys
 tma
