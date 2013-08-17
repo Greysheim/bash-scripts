@@ -16,20 +16,13 @@ fi
 #printf '%s\n' "Successful login. Welcome, $USER. (^_^);;"
 
 #### Environment Variables ####
-
 # Set Prompt Variable
 PS1='\u@\h:\w\$ '
 
-#### Customised Commands and Scripts ####
-
-# Custom Commands
+### Aliases, Scripts, Functions ###
 alias ll="ls -alF"
 alias lll="ls -alF | less"
-
-# SSHFS Drive
-alias mountrimu="bash ~/.scripts/mountrimu.bash"
-
-### Functions ###
+alias mountrimu="~/.scripts/mountrimu"
 
 # Get External IP; Send to GreyRimu
 function sendip() {

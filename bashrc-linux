@@ -45,7 +45,7 @@ alias gitcheck='ssh -T github.com'
 alias cllog='tail -20 ~/.scripts/cron/checklines.run.log | less'
 alias mcrun='~/minecraft/server/run'
 alias mckill='pkill -9 -f minecraft_server'
-alias compilec='~/.scripts/compilec.bash'
+alias compilec='~/.scripts/compilec'
 
 # Save manpage to a web-accessible .txt
 function mansave() {
