@@ -5,11 +5,15 @@
 # DELUXE-USR-LOCAL-BIN-INSERT
 # (do not remove this comment)
 ##
-echo $PATH | grep -q -s "/usr/local/bin"
-if [ $? -eq 1 ] ; then
-    PATH=$PATH:/usr/local/bin
-    export PATH
-fi
+#echo $PATH | grep -q -s "/usr/local/bin"
+#if [ $? -eq 1 ] ; then
+#    PATH=$PATH:/usr/local/bin
+#    export PATH
+#fi
+
+# Recommended path for brew
+PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/X11/bin
+export PATH
 
 #### MotD ####
 #printf '%s\n' "$(uname -sr), $(uname -m); $(uname -n)"
