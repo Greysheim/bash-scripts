@@ -42,6 +42,7 @@ alias mcrun='~/minecraft/server/run'
 alias mckill='pkill -9 -f minecraft_server'
 alias compilec='~/.scripts/compilec'
 alias emacs="emacs -nw"
+alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
 
 function lll() { ls -alF "$@" | less ; }
 
