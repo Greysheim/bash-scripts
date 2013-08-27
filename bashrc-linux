@@ -49,7 +49,19 @@ function lll() { ls -alF "$@" | less ; }
 # Save manpage to a web-accessible .txt
 function mansave() {
    declare -x MANWIDTH="80"
-   man "$1" 2> /dev/null | col -b > "$HOME/www/manpages/$1.txt"
+   saveFile="$HOME/www/manpages/$1.txt"
+   scriptName="mansave"
+   if [ -s "$saveFile" ]; then
+      printf '%s\n' "$scriptName: save target already exists"
+      return 1
+   fi
+   man "$1" | col -b > "$saveFile"
+   manExit=${PIPESTATUS[0]}
+   if [ -e "$saveFile" && ! -s "$saveFile" ]; then
+      rm "$saveFile" || return 2
+   fi
+   [ $manExit != 0 ] && return 1
+   return 0
 }
 
 # Add SSH keys
