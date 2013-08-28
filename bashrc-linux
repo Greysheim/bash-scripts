@@ -57,7 +57,7 @@ function mansave() {
    fi
    man "$1" | col -b > "$saveFile"
    manExit=${PIPESTATUS[0]}
-   if [ -e "$saveFile" && ! -s "$saveFile" ]; then
+   if [ -e "$saveFile" ] && ! [ -s "$saveFile" ]; then
       rm "$saveFile" || return 2
    fi
    [ $manExit != 0 ] && return 1
