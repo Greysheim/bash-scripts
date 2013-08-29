@@ -45,6 +45,7 @@ alias emacs="emacs -nw"
 alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
 
 function lll() { ls -alF "$@" | less ; }
+function javarun() { javac *.java && ( java "$@"; rm *.class ) ; }
 
 # Save manpage to a web-accessible .txt
 function mansave() {

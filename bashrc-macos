@@ -11,22 +11,25 @@
 #    export PATH
 #fi
 
+##### Daniel Cranston's Additions #####
+
 # Recommended path for brew
 PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/X11/bin
 export PATH
 
-#### MotD ####
-#printf '%s\n' "$(uname -sr), $(uname -m); $(uname -n)"
-#printf '%s\n' "Successful login. Welcome, $USER. (^_^);;"
-
-#### Environment Variables ####
-# Set Prompt Variable
+### Environment Variables ###
+declare -x TZ="Pacific/Auckland"
 PS1='\u@\h:\w\$ '
 
 ### Aliases, Scripts, Functions ###
+alias gitcheck='ssh -T github.com'
+alias compilec='~/.scripts/compilec'
+alias emacs="emacs -nw"
 alias ll="ls -alF"
-alias lll="ls -alF | less"
 alias mountrimu="~/.scripts/mountrimu"
+
+function lll() { ls -alF "$@" | less ; }
+function javarun() { javac *.java && ( java "$@"; rm *.class ) ; }
 
 # Get External IP; Send to GreyRimu
 function sendip() {
