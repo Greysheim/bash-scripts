@@ -24,12 +24,12 @@ PS1='\u@\h:\w\$ '
 ### Aliases, Scripts, Functions ###
 alias gitcheck='ssh -T github.com'
 alias compilec='~/.scripts/compilec'
+alias compilejava='~/.scripts/compilejava'
 alias emacs="emacs -nw"
 alias ll="ls -alF"
 alias mountrimu="~/.scripts/mountrimu"
 
 function lll() { ls -alF "$@" | less ; }
-function javarun() { javac *.java && ( java "$@"; rm *.class ) ; }
 
 # Get External IP; Send to GreyRimu
 function sendip() {

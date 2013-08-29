@@ -64,7 +64,7 @@ fi
 
 # Check if the file to be compiled exists
 if ! [ -a $app ]; then
-   printf '%s\n' "compilec: $app not found" >&2
+   printf '%s\n' "$scriptName: $app not found" >&2
    exit 50
 fi
 
@@ -74,10 +74,9 @@ cOut=$(mktemp)
 cErr=$(mktemp)
 #printf '%s' "Compiling... "
 gcc -ansi $app -o $exe 1> $cOut 2> $cErr
-cExit=$?
 # If compile successful, execute and display any run errors;
 # Else display output from compile
-if [[ $cExit == 0 &&  (! -s $cErr) ]]; then
+if [[ $? == 0 &&  (! -s $cErr) ]]; then
    [ -s $cOut ] && less $cOut
    rm $cErr $cOut
    #printf '%s\n' "Executing..."
