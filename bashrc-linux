@@ -90,7 +90,7 @@ function tma() {
       tmux new-window -t $session:1
    fi
 
-   tmux -2 attach-session -t $session:0 > /dev/null
+   tmux -2 attach-session -t $session > /dev/null
 }
 
 ### Run ###
