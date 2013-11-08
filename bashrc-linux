@@ -86,7 +86,7 @@ function tma() {
 
    if  ( ! tmux has -t $session &> /dev/null ); then
       tmux -2 new-session -ds $session > /dev/null
-      #tmux send-keys -t $session:0 "mcrun" C-m
+      tmux send-keys -t $session:0 "mcrun" C-m
       tmux new-window -t $session:1
    fi
 
