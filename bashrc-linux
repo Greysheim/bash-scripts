@@ -38,7 +38,7 @@ declare -x TZ="Pacific/Auckland"
 ### Aliases, Scripts, Functions ###
 alias gitcheck='ssh -T github.com'
 alias cllog='tail -20 ~/.scripts/cron/checklines.run.log | less'
-alias mcrun='~/minecraft/server/run'
+alias mcrun='~/.scripts/mcrun'
 alias mckill='pkill -9 -f minecraft_server'
 alias compilec='~/.scripts/compilec'
 alias compilejava='~/.scripts/compilejava'
@@ -86,7 +86,7 @@ function tma() {
 
    if  ( ! tmux has -t $session &> /dev/null ); then
       tmux -2 new-session -ds $session > /dev/null
-      tmux send-keys -t $session:0 "mcrun" C-m
+      tmux send-keys -t $session:0 "mcrun greysworld" C-m
       tmux new-window -t $session:1
    fi
 
