@@ -73,11 +73,12 @@ fi
 # Navigate to world directory
 cd "$worldAbsDir" || exit 1
 
-# Set tmux window title to "minecraft"
+# Set tmux window title to "mc-$worldName"
 oldWName="$(tmux display-message -p "#W" 2> /dev/null)"
-[ "$TMUX" ] && printf '\033k%s\033\\' "minecraft"
+[ "$TMUX" ] && printf '\033k%s\033\\' "mc-$worldName"
 
-/usr/bin/java -Xms50M -Xmx350M -jar minecraft_server.jar nogui
+#/usr/bin/java -Xms50M -Xmx350M -jar minecraft_server.jar nogui
+/usr/bin/java -Xms50M -Xmx200M -jar minecraft_server.jar nogui
 exitStatus=$?
 
 [ "$TMUX" ] && printf '\033k%s\033\\' "$oldWName"
