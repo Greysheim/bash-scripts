@@ -33,14 +33,15 @@ if [ $PS1 ]; then
 fi
 
 scriptName="mcrun"
+maxWorlds=2
+maxRam=200M
+#maxRam=400M
 
-pgrep -f "minecraft_server" &> /dev/null
-if [ ! $? ]; then
-   printf '%s\n' "$scriptName: minecraft is already running" >&2
+worldsRunning=$(pgrep -f "minecraft_server" 2> /dev/null | wc -l)
+if [ $worldsRunning -ge $maxWorlds ]; then
+   printf '%s\n' "$scriptName: too many worlds running" >&2
    exit 1
 fi
-
-worldDir=$(printf '%q' "${PWD##*/}")
 
 if [ $2 ]; then
    printf '%s\n' "$scriptName: Too many args" >&2
@@ -66,7 +67,7 @@ fi
 saveDir="$mcDir/saves"
 
 if [ ! -d "$worldAbsDir" ]; then
-   printf '%s\s' "$scriptName: World directory does not exist" >&2
+   printf '%s\n' "$scriptName: World directory does not exist" >&2
    exit 1
 fi
 
@@ -77,8 +78,7 @@ cd "$worldAbsDir" || exit 1
 oldWName="$(tmux display-message -p "#W" 2> /dev/null)"
 [ "$TMUX" ] && printf '\033k%s\033\\' "mc-$worldName"
 
-#/usr/bin/java -Xms50M -Xmx350M -jar minecraft_server.jar nogui
-/usr/bin/java -Xms50M -Xmx200M -jar minecraft_server.jar nogui
+/usr/bin/java -Xms50M -Xmx$maxRam -jar minecraft_server.jar nogui
 exitStatus=$?
 
 [ "$TMUX" ] && printf '\033k%s\033\\' "$oldWName"
