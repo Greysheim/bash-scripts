@@ -34,8 +34,8 @@ fi
 
 scriptName="mcrun"
 maxWorlds=2
-maxRam=200M
-#maxRam=400M
+maxRam=$(( 400 / $maxWorlds ))M
+bukkit=1 # 0 == true, 1 == false
 
 worldsRunning=$(pgrep -f "minecraft_server" 2> /dev/null | wc -l)
 if [ $worldsRunning -ge $maxWorlds ]; then
@@ -78,7 +78,11 @@ cd "$worldAbsDir" || exit 1
 oldWName="$(tmux display-message -p "#W" 2> /dev/null)"
 [ "$TMUX" ] && printf '\033k%s\033\\' "mc-$worldName"
 
-/usr/bin/java -Xms50M -Xmx$maxRam -jar minecraft_server.jar nogui
+if [ $bukkit == 0 ]; then
+   /usr/bin/java -Xms50M -Xmx$maxRam -jar craftbukkit.jar -o true
+else
+   /usr/bin/java -Xms50M -Xmx$maxRam -jar minecraft_server.jar nogui
+fi
 exitStatus=$?
 
 [ "$TMUX" ] && printf '\033k%s\033\\' "$oldWName"
