@@ -83,10 +83,11 @@ exitStatus=$?
 
 [ "$TMUX" ] && printf '\033k%s\033\\' "$oldWName"
 
-# Backup world to a tarball in "$saveDir"
+# Backup world to a tarball in "$saveDir/$worldName"
 printf '%s\n' "Backing up world..."
 [ -d "$saveDir" ] || mkdir "$saveDir"
-cd .. && tar -czf "$saveDir/$worldName-$(date +%Y-%m-%d).tgz" "$worldName/"
+[ -d "$saveDir/$worldName" ] || mkdir "$saveDir/$worldName"
+cd .. && tar -czf "$saveDir/$worldName/$worldName-$(date +%Y-%m-%d).tgz" "$worldName/"
 exitStatus=$(( $exitStatus + $? ))
 
 exit $exitStatus
