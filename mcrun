@@ -52,52 +52,50 @@ fi
 # containing this script
 if [ $1 ]; then
    mcDir="$HOME/minecraft"
-   worldAbsDir="$mcDir/$1"
-   worldName="$1"
+   worldDir="$mcDir/$1"
+   world="$1"
 else
-   worldAbsDir="$(dirname "$0" 2> /dev/null)"
-   if [ "$worldAbsDir" == "/" ]; then
+   worldDir="$(dirname "$0" 2> /dev/null)"
+   if [ "$worldDir" == "/" ]; then
       printf '%s\n' "$scriptName: Please run from a subfolder" >&2
       exit 1
    fi
-   mcDir="${worldAbsDir%/*}"
-   worldName="${worldAbsDir##*/}"
+   mcDir="${worldDir%/*}"
+   world="${worldDir##*/}"
 fi
-
 saveDir="$mcDir/saves"
 
-if [ ! -d "$worldAbsDir" ]; then
+if [ ! -d "$worldDir" ]; then
    printf '%s\n' "$scriptName: World directory does not exist" >&2
    exit 1
 fi
+cd "$worldDir" || exit 1
 
-# Navigate to world directory
-cd "$worldAbsDir" || exit 1
-
-# Set tmux window title to "mc-$worldName"
+# Set tmux window title to "mc-$world"
 oldWName="$(tmux display-message -p "#W" 2> /dev/null)"
-[ "$TMUX" ] && printf '\033k%s\033\\' "mc-$worldName"
+[ "$TMUX" ] && printf '\033k%s\033\\' "mc-$world"
 
 if [ $bukkit == 0 ]; then
-   /usr/bin/java -Xms50M -Xmx$maxRam -jar craftbukkit.jar -o true
+   java -Xms50M -Xmx$maxRam -jar craftbukkit.jar -o true
 else
-   /usr/bin/java -Xms50M -Xmx$maxRam -jar minecraft_server.jar nogui
+   java -Xms50M -Xmx$maxRam -jar minecraft_server.jar nogui
 fi
 exitStatus=$?
 
 [ "$TMUX" ] && printf '\033k%s\033\\' "$oldWName"
 
-# Backup world to a tarball in "$saveDir/$worldName"
+# Backup level to a tarball in "$saveDir/$world"
 [ -d "$saveDir" ] || mkdir "$saveDir"
-[ -d "$saveDir/$worldName" ] || mkdir "$saveDir/$worldName"
-saveFile="$saveDir/$worldName/$worldName-$(date +%Y-%m-%d)-"
+[ -d "$saveDir/$world" ] || mkdir "$saveDir/$world"
 cd .. || exit 1
+saveFile="$saveDir/$world/$world-$(date +%Y-%m-%d)-"
 
 i=0
 while true; do
    if [ ! -e $saveFile$i.tgz ]; then
-      printf '%s\n' "Backing up world: $saveFile$i.tgz"
-      tar -czf "$saveFile$i.tgz" "$worldName/"
+      printf '%s\n' "Backing up: $saveFile$i.tgz"
+      tar -czf "$saveFile$i.tgz" "$world/"
+      let exitStatus+=$?
       break
    fi
    let i+=1
