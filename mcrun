@@ -33,13 +33,13 @@ if [ $PS1 ]; then
 fi
 
 scriptName="mcrun"
-maxWorlds=2
+maxWorlds=1
 maxRam=$(( 400 / $maxWorlds ))M
 bukkit=1 # 0 == true, 1 == false
 
 worldsRunning=$(pgrep -f "minecraft_server" 2> /dev/null | wc -l)
 if [ $worldsRunning -ge $maxWorlds ]; then
-   printf '%s\n' "$scriptName: too many worlds running" >&2
+   printf '%s\n' "$scriptName: Too many worlds running" >&2
    exit 1
 fi
 

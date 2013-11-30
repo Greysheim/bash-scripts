@@ -26,7 +26,7 @@ alias gitcheck='ssh -T github.com'
 alias compilec='~/.scripts/compilec'
 alias compilejava='~/.scripts/compilejava'
 alias emacs="emacs -nw"
-alias ll="ls -alF"
+alias ll="ls -alFh"
 alias mountrimu="~/.scripts/mountrimu"
 
 function lll() { ls -alF "$@" | less ; }
