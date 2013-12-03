@@ -28,25 +28,22 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-alias ll='ls -alFh'
 
 ##### Daniel Cranston's Additions #####
 
 ### Environment Variables ###
+declare -x PATH=$PATH:$HOME/.scripts
 declare -x TZ="Pacific/Auckland"
 
 ### Aliases, Scripts, Functions ###
 alias gitcheck='ssh -T github.com'
-alias cllog='tail -20 ~/.scripts/cron/checklines.run.log | less'
-alias mcrun='~/.scripts/mcrun'
-alias mckill='pkill -9 -f minecraft_server'
-alias compilec='~/.scripts/compilec'
-alias compilejava='~/.scripts/compilejava'
 alias emacs="emacs -nw"
-alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
+alias ll='ls -alFh'
 alias py='python'
+alias mckill='pkill -9 -f minecraft_server'
+alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
 
-function lll() { ls -alF "$@" | less ; }
+function lll() { ls -alFh "$@" | less ; }
 
 # Save manpage to a web-accessible .txt
 function mansave() {
@@ -97,6 +94,6 @@ function tma() {
 ### Run ###
 if [ -z "$TMUX" ]; then
    addsshkeys
-   sleep 3
+   sleep 2
 fi
 tma
