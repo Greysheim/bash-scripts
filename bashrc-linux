@@ -44,6 +44,7 @@ alias compilec='~/.scripts/compilec'
 alias compilejava='~/.scripts/compilejava'
 alias emacs="emacs -nw"
 alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
+alias py='python'
 
 function lll() { ls -alF "$@" | less ; }
 
@@ -86,7 +87,7 @@ function tma() {
 
    if  ( ! tmux has -t $session &> /dev/null ); then
       tmux -2 new-session -ds $session > /dev/null
-      tmux send-keys -t $session:0 "mcrun greysworld" C-m
+      #tmux send-keys -t $session:0 "mcrun greycolander" C-m
       tmux new-window -t $session:1
    fi
 
@@ -94,5 +95,8 @@ function tma() {
 }
 
 ### Run ###
-[ -z "$TMUX" ] && addsshkeys
+if [ -z "$TMUX" ]; then
+   addsshkeys
+   sleep 3
+fi
 tma
