@@ -19,7 +19,10 @@ declare -x PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/op
 ### Environment Variables ###
 declare -x PATH=$PATH:$HOME/.bin
 declare -x TZ="Pacific/Auckland"
-PS1='\u@\h:\w\$ '
+declare -x PS1='\u@\h:\w\$ '
+declare -x CLICOLOR=1
+declare -x GREP_OPTIONS='--color=auto'
+declare -x GREP_COLOR='1;35;40'
 
 ### Aliases, Scripts, Functions ###
 alias gitcheck='ssh -T github.com'
