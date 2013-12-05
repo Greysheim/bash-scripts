@@ -17,7 +17,7 @@
 declare -x PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/X11/bin
 
 ### Environment Variables ###
-declare -x PATH=$PATH:$HOME/.scripts
+declare -x PATH=$PATH:$HOME/.bin
 declare -x TZ="Pacific/Auckland"
 PS1='\u@\h:\w\$ '
 

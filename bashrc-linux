@@ -32,14 +32,13 @@ fi
 ##### Daniel Cranston's Additions #####
 
 ### Environment Variables ###
-declare -x PATH=$PATH:$HOME/.scripts
+declare -x PATH=$PATH:$HOME/.bin
 declare -x TZ="Pacific/Auckland"
 
 ### Aliases, Scripts, Functions ###
 alias gitcheck='ssh -T github.com'
 alias emacs="emacs -nw"
 alias ll='ls -alFh'
-alias py='python'
 alias mckill='pkill -9 -f minecraft_server'
 alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
 
