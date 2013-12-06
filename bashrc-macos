@@ -28,10 +28,19 @@ declare -x GREP_COLOR='1;35;40'
 alias gitcheck='ssh -T github.com'
 alias emacs="emacs -nw"
 alias ll="ls -alFh"
-alias py='python'
 alias mckill='pkill -9 -f minecraft_server'
 
 function lll() { ls -alFh "$@" | less ; }
+
+# Run in Python 2.7, then Python 3 if successful
+function pyb() {
+   printf '%s\n' "EXECUTING PYTHON 2.7"
+   python2.7 "$@"
+   if [ $? == 0 ]; then
+      printf '%s\n' "EXECUTING PYTHON 3"
+      python3 "$@"
+   fi
+}
 
 # Get External IP; Send to GreyRimu
 function sendip() {

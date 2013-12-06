@@ -44,6 +44,16 @@ alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
 
 function lll() { ls -alFh "$@" | less ; }
 
+# Run in Python 2.7, then Python 3 if successful
+function pyb() {
+   printf '%s\n' "EXECUTING PYTHON 2.7"
+   python2.7 "$@"
+   if [ $? == 0 ]; then
+      printf '%s\n' "EXECUTING PYTHON 3"
+      python3 "$@"
+   fi
+}
+
 # Save manpage to a web-accessible .txt
 function mansave() {
    declare -x MANWIDTH="80"
