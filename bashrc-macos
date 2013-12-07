@@ -32,14 +32,17 @@ alias mckill='pkill -9 -f minecraft_server'
 
 function lll() { ls -alFh "$@" | less ; }
 
-# Run in Python 2.7, then Python 3 if successful
+# Run in Python 2.7, then Python 3
 function pyb() {
-   printf '%s\n' "EXECUTING PYTHON 2.7"
+   clear
+   printf '%s' "\$"
+   for i in $@; do
+      printf '%s' " $i"
+   done
+   printf '\n\n%s\n' "EXECUTING PYTHON 2.7"
    python2.7 "$@"
-   if [ $? == 0 ]; then
-      printf '%s\n' "EXECUTING PYTHON 3"
-      python3 "$@"
-   fi
+   printf '\n%s\n' "EXECUTING PYTHON 3"
+   python3 "$@"
 }
 
 # Get External IP; Send to GreyRimu
