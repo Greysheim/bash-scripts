@@ -36,13 +36,19 @@ declare -x PATH=$PATH:$HOME/.bin
 declare -x TZ="Pacific/Auckland"
 
 ### Aliases, Scripts, Functions ###
-alias gitcheck='ssh -T github.com'
 alias emacs="emacs -nw"
 alias ll='ls -alFh'
 alias mckill='pkill -9 -f minecraft_server'
 alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
 
 function lll() { ls -alFh "$@" | less ; }
+
+function gitcheck() {
+   ssh -T github.com &> /dev/null
+   if [ $? != 1 ]; then
+      echo "Failed to connect"
+   fi
+}
 
 # Run in Python 2.7, then Python 3
 function pyb() {
@@ -77,14 +83,28 @@ function mansave() {
 
 # Add SSH keys
 function addsshkeys() {
+
+   # Set socket filepath
+   export SSH_AUTH_SOCK="$HOME/.ssh/.ssh-socket"
+
+   # File for output from ssh-agent
    agentInfo="$HOME/.ssh/.ssh-agent"
-   pgrep ssh-agent &> /dev/null
-   if [ $? != 0 ] || ! [ -a "$agentInfo" ]; then
-      ssh-agent > "$agentInfo"
+
+   ssh-add -l &> /dev/null
+   if [ $? == 2 ] || ! [ -a "$agentInfo" ]; then
+      # No ssh-agent running or $agentInfo doesn't exist
+      echo "(Re)launching ssh-agent"
+      pkill ssh-agent
+      rm -rf $SSH_AUTH_SOCK
+      # >| allows output redirection to over-write files if no clobber is set
+      ssh-agent -a $SSH_AUTH_SOCK >| "$agentInfo"
    fi
-   . "$agentInfo" &> /dev/null
-   if ( ! ssh-add -l | grep "greyrimu_github_rsa" &> /dev/null ); then
-      ssh-add ~/.ssh/greyrimu_github_rsa &> /dev/null
+
+   source $agentInfo &> /dev/null
+   
+   if ( ! ssh-add -l | grep "id_rsa" &> /dev/null ); then
+      echo "Adding ssh key(s)"
+      ssh-add ~/.ssh/id_rsa &> /dev/null
    fi
 }
 
@@ -96,8 +116,7 @@ function tma() {
 
    if  ( ! tmux has -t $session &> /dev/null ); then
       tmux -2 new-session -ds $session > /dev/null
-      #tmux send-keys -t $session:0 "mcrun.py greycolander -ok" C-m
-      tmux new-window -t $session:1
+      #tmux new-window -t $session:1
    fi
 
    tmux -2 attach-session -t $session > /dev/null
@@ -106,6 +125,6 @@ function tma() {
 ### Run ###
 if [ -z "$TMUX" ]; then
    addsshkeys
-   sleep 2
+   #sleep 2
 fi
-tma
+#tma

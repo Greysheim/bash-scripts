@@ -6,6 +6,6 @@ if [ "$SHLVL" = 1 ]; then
     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
-if ( ! tmux has &> /dev/null ); then
-   pkill ssh-agent
-fi
+#if ( ! tmux has &> /dev/null ); then
+#   pkill ssh-agent
+#fi
