@@ -40,6 +40,7 @@ alias emacs="emacs -nw"
 alias ll='ls -alFh'
 alias mckill='pkill -9 -f minecraft_server'
 alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
+alias nano='nano -cix'
 
 function lll() { ls -alFh "$@" | less ; }
 

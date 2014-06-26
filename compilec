@@ -2,7 +2,7 @@
 
 # compilec - Compiles and executes C program(s) then deletes output file.
 # Displays any error messages in less for debugging compile errors.
-# Copyright Daniel Cranston 2008-2013.
+# Copyright Daniel Cranston 2008-2014.
 #
 # This file is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by the
@@ -24,7 +24,7 @@ fi
 
 scriptName="$(basename "$0")"
 
-if [ $2 ]; then
+if [ "$2" ]; then
    printf '%s\n' "$scriptName: Too many args" >&2
    exit 11
 fi
@@ -35,9 +35,9 @@ if ( ! which gcc less &> /dev/null ); then
 fi
 
 # If parameter is a directory, go there; else assume it is a file to run
-if [ $1 ]; then
-   if [ -d $1 ]; then
-      cd $1 || exit 30
+if [ "$1" ]; then
+   if [ -d "$1" ]; then
+      cd "$1" || exit 30
    else
       app="$1"
    fi
@@ -63,7 +63,7 @@ if [ -z "$app" ]; then
 fi
 
 # Check if the file to be compiled exists
-if ! [ -a $app ]; then
+if ! [ -a "$app" ]; then
    printf '%s\n' "$scriptName: $app not found" >&2
    exit 50
 fi
@@ -73,7 +73,7 @@ exe=$(mktemp)
 cOut=$(mktemp)
 cErr=$(mktemp)
 #printf '%s' "Compiling... "
-gcc -ansi $app -o $exe 1> $cOut 2> $cErr
+gcc -ansi "$app" -o $exe 1> $cOut 2> $cErr
 # If compile successful, execute and display any run errors;
 # Else display output from compile
 if [[ $? == 0 &&  (! -s $cErr) ]]; then
