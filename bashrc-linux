@@ -38,11 +38,14 @@ declare -x TZ="Pacific/Auckland"
 ### Aliases, Scripts, Functions ###
 alias emacs="emacs -nw"
 alias ll='ls -alFh'
-alias mckill='pkill -9 -f minecraft_server'
-alias sshdax='ssh dax@$(cat ~/.ssh/.daxmacip)'
 alias nano='nano -cix'
 
 function lll() { ls -alFh "$@" | less ; }
+
+function minecraft() {
+   bash -c 'nohup java -jar "$HOME/.bin/Minecraft.jar"\
+      < /dev/null &> /dev/null &'
+}
 
 function gitcheck() {
    ssh -T github.com &> /dev/null
@@ -94,7 +97,7 @@ function addsshkeys() {
    ssh-add -l &> /dev/null
    if [ $? == 2 ] || ! [ -a "$agentInfo" ]; then
       # No ssh-agent running or $agentInfo doesn't exist
-      echo "(Re)launching ssh-agent"
+      echo "addsshkeys: relaunching ssh-agent"
       pkill ssh-agent
       rm -rf $SSH_AUTH_SOCK
       # >| allows output redirection to over-write files if no clobber is set
@@ -104,7 +107,7 @@ function addsshkeys() {
    source $agentInfo &> /dev/null
    
    if ( ! ssh-add -l | grep "id_rsa" &> /dev/null ); then
-      echo "Adding ssh key(s)"
+      echo "addsshkeys: adding id_rsa"
       ssh-add ~/.ssh/id_rsa &> /dev/null
    fi
 }
