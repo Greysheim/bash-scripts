@@ -40,7 +40,7 @@ alias emacs="emacs -nw"
 alias ll='ls -alFh'
 alias nano='nano -cix'
 
-function lll() { ls -alFh "$@" | less ; }
+function lll() { ls -alFh --color "$@" | less -R; }
 
 function minecraft() {
    bash -c 'nohup java -jar "$HOME/.bin/Minecraft.jar"\
