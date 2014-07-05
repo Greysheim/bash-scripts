@@ -54,6 +54,14 @@ function gitcheck() {
    fi
 }
 
+function pswatch() {
+   lines=$1
+   if [ -z $lines ]; then
+      lines=10
+   fi
+   watch "ps aux | sort -rk 3,3 | head -n $lines"
+}
+
 # Run in Python 2.7, then Python 3
 function pyb() {
    clear
