@@ -99,7 +99,7 @@ function addsshkeys() {
    ssh-add -l &> /dev/null
    if [ $? == 2 ] || ! [ -a "$agentInfo" ]; then
       # No ssh-agent running or $agentInfo doesn't exist
-      echo "addsshkeys: relaunching ssh-agent"
+      printf '%s' "Relaunching ssh-agent. "
       pkill ssh-agent
       rm -rf $SSH_AUTH_SOCK
       # >| allows output redirection to over-write files if no clobber is set
@@ -109,7 +109,7 @@ function addsshkeys() {
    source $agentInfo &> /dev/null
    
    if ( ! ssh-add -l | grep "id_rsa" &> /dev/null ); then
-      echo "addsshkeys: adding id_rsa"
+      printf '%s\n' "Adding id_rsa. "
       ssh-add ~/.ssh/id_rsa &> /dev/null
    fi
 }

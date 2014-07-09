@@ -29,7 +29,7 @@ if [ "$2" ]; then
    exit 11
 fi
 
-if ( ! which gcc less &> /dev/null ); then
+if ( ! which cc less &> /dev/null ); then
    printf '%s\n' "$scriptName: Dependencies not found" >&2
    exit 20
 fi
@@ -73,7 +73,7 @@ exe=$(mktemp)
 cOut=$(mktemp)
 cErr=$(mktemp)
 #printf '%s' "Compiling... "
-gcc -ansi "$app" -o $exe 1> $cOut 2> $cErr
+cc -ansi -Wall -g "$app" -o $exe 1> $cOut 2> $cErr
 # If compile successful, execute and display any run errors;
 # Else display output from compile
 if [[ $? == 0 &&  (! -s $cErr) ]]; then
@@ -92,7 +92,7 @@ else
    #printf '\n'
    rm $exe 2> /dev/null
    ( [ -s $cOut ] || [ -s $cErr ] ) && cat $cOut $cErr | less
-   printf '%s\n' "$scriptName: Compile error: gcc exited $cExit" >&2
+   printf '%s\n' "$scriptName: Compile error: cc exited $cExit" >&2
    rm $cOut $cErr
    exit 60
 fi
