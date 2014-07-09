@@ -13,9 +13,6 @@
 
 ##### Daniel Cranston's Additions #####
 
-# Recommended path for brew
-declare -x PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/X11/bin
-
 ### Environment Variables ###
 declare -x PATH=$PATH:$HOME/.bin
 declare -x TZ="Pacific/Auckland"
@@ -25,12 +22,13 @@ declare -x GREP_OPTIONS='--color=auto'
 declare -x GREP_COLOR='1;35;40'
 
 ### Aliases, Scripts, Functions ###
-alias gitcheck='ssh -T github.com'
+alias gitcheck='ssh -T git@github.com'
 alias emacs="emacs -nw"
 alias ll="ls -alFh"
+alias nano='nano -cix'
 alias mckill='pkill -9 -f minecraft_server'
 
-function lll() { ls -alFh "$@" | less ; }
+function lll() { ls -alFh --color "$@" | less -R; }
 
 # Run in Python 2.7, then Python 3
 function pyb() {
@@ -43,12 +41,4 @@ function pyb() {
    python2.7 "$@"
    printf '\n%s\n' "EXECUTING PYTHON 3"
    python3 "$@"
-}
-
-# Get External IP; Send to GreyRimu
-function sendip() {
-   #ipSource="ifconfig.me"
-   ipSource="icanhazip.com"
-   curl -s "$ipSource" > "$HOME/.daxmacip" || return 1
-   rsync -avzqe ssh "$HOME/.daxmacip" 'rimu:~/.ssh/'
 }

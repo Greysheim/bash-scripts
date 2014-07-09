@@ -36,6 +36,7 @@ declare -x PATH=$PATH:$HOME/.bin
 declare -x TZ="Pacific/Auckland"
 
 ### Aliases, Scripts, Functions ###
+alias gitcheck='ssh -T git@github.com'
 alias emacs="emacs -nw"
 alias ll='ls -alFh'
 alias nano='nano -cix'
@@ -45,13 +46,6 @@ function lll() { ls -alFh --color "$@" | less -R; }
 function minecraft() {
    bash -c 'nohup java -jar "$HOME/.bin/Minecraft.jar"\
       < /dev/null &> /dev/null &'
-}
-
-function gitcheck() {
-   ssh -T github.com &> /dev/null
-   if [ $? != 1 ]; then
-      echo "Failed to connect"
-   fi
 }
 
 function pswatch() {
