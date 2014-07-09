@@ -28,7 +28,7 @@ alias ll="ls -alFh"
 alias nano='nano -cix'
 alias mckill='pkill -9 -f minecraft_server'
 
-function lll() { ls -alFh --color "$@" | less -R; }
+function lll() { CLICOLOR_FORCE=1 ls -alFh -G "$@" | less -R; }
 
 # Run in Python 2.7, then Python 3
 function pyb() {
