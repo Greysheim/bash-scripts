@@ -56,6 +56,15 @@ function pswatch() {
    watch "ps aux | sort -rk 3,3 | head -n $lines"
 }
 
+function gd() {
+    oldWD=$PWD
+    cd "$HOME/Google Drive/" || return 1
+    grive "$@"
+    exitStatus=$?
+    cd "$oldWD" || return 1
+    return $exitStatus
+}
+
 # Run in Python 2.7, then Python 3
 function pyb() {
    clear
