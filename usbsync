@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#Edited from http://unix.stackexchange.com/questions/66749/how-to-auto-sync-with-a-plugged-in-usb-mass-storage-device
+
+exitcode=1
+localFolder="$HOME/Google Drive/Uni-Massey/"
+usbFolder="/media/grey/EMTEC/Uni-Massey/"
+usbDrive="/media/grey/EMTEC"
+#do check if usb flash is mounted
+if test -e "$usbDrive";then
+    exitcode=0
+    #from folder to usb if the files are newers
+    rsync -avu --inplace  "$localFolder" "$usbFolder"
+    #from usb to folder if the files are newers
+    rsync -avu --inplace "$usbFolder" "$localFolder"
+fi
+#if the flash is not mounted exit with exitcode=1
+exit $exitcode
