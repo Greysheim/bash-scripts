@@ -73,7 +73,7 @@ exe=$(mktemp)
 cOut=$(mktemp)
 cErr=$(mktemp)
 #printf '%s' "Compiling... "
-cc -ansi -Wall -g "$app" -o $exe 1> $cOut 2> $cErr
+cc -Wall -g "$app" -o $exe -lm 1> $cOut 2> $cErr
 # If compile successful, execute and display any run errors;
 # Else display output from compile
 if [[ $? == 0 &&  (! -s $cErr) ]]; then

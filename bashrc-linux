@@ -48,6 +48,13 @@ function minecraft() {
       < /dev/null &> /dev/null &'
 }
 
+# "Edit, Compile, Run" a single .c file
+function ecr() {
+   nano "$1.c" &&\
+   make "$1" &&\
+   "./$1"
+}
+
 function pswatch() {
    lines=$1
    if [ -z $lines ]; then
