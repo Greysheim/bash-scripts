@@ -40,6 +40,7 @@ alias gitcheck='ssh -T git@github.com'
 alias emacs="emacs -nw"
 alias ll='ls -alFh'
 alias nano='nano -cix'
+alias make='CFLAGS="-Wall -g3" make'
 
 function lll() { ls -alFh --color "$@" | less -R; }
 
@@ -72,7 +73,7 @@ function gd() {
     return $exitStatus
 }
 
-function gdus() { gd && usbsync && gd && usbsync; }
+function gdus() { usbsync && gd && usbsync; }
 
 # Run in Python 2.7, then Python 3
 function pyb() {
